@@ -243,10 +243,20 @@ if "api_key" not in st.session_state:
 if "current_persona" not in st.session_state:
     st.session_state.current_persona = "Custom"
 
-def get_personality_prompt(persona: str, sliders: Dict[str, int], response_length: str) -> str:
+if "character_set" not in st.session_state:
+    st.session_state.character_set = False
+
+if "custom_character" not in st.session_state:
+    st.session_state.custom_character = ""
+
+def get_personality_prompt(persona: str, sliders: Dict[str, int], response_length: str, custom_character: str = "") -> str:
     """Generate personality-based system prompt"""
     
-    base_prompt = PERSONAS[persona]["system_prompt"]
+    # If custom character is provided, use it instead of preset personas
+    if custom_character and persona == "Custom":
+        base_prompt = f"You are {custom_character}. Embody this character completely - their personality, speech patterns, mannerisms, and way of thinking. Stay in character throughout the conversation."
+    else:
+        base_prompt = PERSONAS[persona]["system_prompt"]
     
     # Add personality modifiers
     modifiers = []
@@ -308,6 +318,26 @@ def get_personality_prompt(persona: str, sliders: Dict[str, int], response_lengt
     
     return full_prompt
 
+def detect_character_request(text: str) -> str:
+    """Detect if user is describing a character they want the AI to act as"""
+    keywords = [
+        "act like", "act as", "be like", "behave like", "pretend to be", "roleplay as",
+        "talk like", "speak like", "become", "transform into", "channel", "embody",
+        "i want you to be", "you are now", "from now on you are", "you should act"
+    ]
+    
+    text_lower = text.lower()
+    
+    for keyword in keywords:
+        if keyword in text_lower:
+            # Extract the character description after the keyword
+            parts = text_lower.split(keyword, 1)
+            if len(parts) > 1:
+                character_desc = parts[1].strip()
+                # Clean up common prefixes
+                character_desc = character_desc.replace("a ", "").replace("an ", "").replace("the ", "")
+                return character_desc
+    
 def get_ai_response(messages: List[Dict], system_prompt: str, api_key: str) -> str:
     """Get response from OpenAI API"""
     try:
@@ -332,9 +362,24 @@ with st.sidebar:
     
     # API Key input
     st.markdown("**🔑 OpenAI API Key:**")
-    api_key = st.text_input("Enter your OpenAI API key", type="password", value=st.session_state.api_key)
-    if api_key:
+    
+    # Try to get API key from secrets (for Streamlit Cloud)
+    try:
+        api_key = st.secrets["OPENAI_API_KEY"]
         st.session_state.api_key = api_key
+        st.success("✅ API Key loaded from secrets")
+    except:
+        # Fallback to manual input (for local development)
+        api_key = st.text_input("Enter your OpenAI API key", type="password", value=st.session_state.api_key)
+        if api_key:
+            st.session_state.api_key = api_key
+    
+    # Show current character info
+    if st.session_state.custom_character:
+        st.markdown("---")
+        st.markdown("**🎭 Current Character:**")
+        st.markdown(f"*Acting as: {st.session_state.custom_character}*")
+        st.markdown("*You can change character anytime by saying 'Act like...' or 'Be like...'*")
     
     st.markdown("---")
     
@@ -382,12 +427,16 @@ with st.sidebar:
     st.markdown("---")
     
     # Control buttons
-    if st.button("🔄 Reset Personality"):
-        st.session_state.current_persona = selected_persona
+    if st.button("🔄 Reset Character"):
+        st.session_state.custom_character = ""
+        st.session_state.character_set = False
+        st.session_state.current_persona = "Custom"
         st.rerun()
     
     if st.button("🗑️ Clear Chat History"):
         st.session_state.messages = []
+        st.session_state.character_set = False
+        st.session_state.custom_character = ""
         st.rerun()
     
     st.markdown('</div>', unsafe_allow_html=True)
@@ -397,7 +446,30 @@ st.markdown('<div class="terminal-container">', unsafe_allow_html=True)
 st.markdown('<div class="terminal-header">🤖 MATRIX CHATBOT INTERFACE</div>', unsafe_allow_html=True)
 
 # Show current persona
-st.markdown(f'<span class="persona-badge">Current Persona: {selected_persona}</span>', unsafe_allow_html=True)
+if st.session_state.custom_character:
+    st.markdown(f'<span class="persona-badge">Current Character: {st.session_state.custom_character}</span>', unsafe_allow_html=True)
+else:
+    st.markdown(f'<span class="persona-badge">Current Persona: {selected_persona}</span>', unsafe_allow_html=True)
+
+# Initial greeting if no messages
+if not st.session_state.messages and st.session_state.api_key:
+    initial_greeting = """🤖 **Welcome to the Matrix ChatBot!**
+    
+I can become any character you want me to be. Just tell me who you'd like me to act as!
+
+**Examples:**
+- "Act like Sherlock Holmes"
+- "Behave like a pirate captain"
+- "Be like Albert Einstein"
+- "Talk like Shakespeare"
+- "Pretend to be a wise old wizard"
+
+**Or choose from preset personas in the sidebar:**
+- Narendra Modi, James Bond, Sheldon Cooper, Tony Stark, Yoda, Sherlock Holmes
+
+*Who would you like me to become?*"""
+    
+    st.markdown(f'<div class="ai-message"><strong>MATRIX SYSTEM:</strong> {initial_greeting}</div>', unsafe_allow_html=True)
 
 # Chat history
 chat_container = st.container()
@@ -413,28 +485,61 @@ if prompt := st.chat_input("Enter your message to the Matrix..."):
     if not st.session_state.api_key:
         st.error("Please enter your OpenAI API key in the sidebar!")
     else:
-        # Add user message
-        st.session_state.messages.append({"role": "user", "content": prompt})
+        # Check if user is describing a character
+        character_request = detect_character_request(prompt)
         
-        # Show user message
-        st.markdown(f'<div class="user-message"><strong>USER:</strong> {prompt}</div>', unsafe_allow_html=True)
-        
-        # Show typing indicator
-        with st.spinner("AI is thinking..."):
-            # Generate system prompt
-            system_prompt = get_personality_prompt(selected_persona, sliders, response_length)
+        if character_request and not st.session_state.character_set:
+            # User is setting a custom character
+            st.session_state.custom_character = character_request
+            st.session_state.character_set = True
+            st.session_state.current_persona = "Custom"
             
-            # Get AI response
-            response = get_ai_response(st.session_state.messages, system_prompt, st.session_state.api_key)
+            # Add user message
+            st.session_state.messages.append({"role": "user", "content": prompt})
             
-            # Add AI response
-            st.session_state.messages.append({"role": "assistant", "content": response})
+            # Show user message
+            st.markdown(f'<div class="user-message"><strong>USER:</strong> {prompt}</div>', unsafe_allow_html=True)
             
-            # Show AI response
-            st.markdown(f'<div class="ai-message"><strong>{selected_persona.upper()}:</strong> {response}</div>', unsafe_allow_html=True)
+            # Generate character confirmation response
+            confirmation_response = f"🎭 **Character Set!** I am now {st.session_state.custom_character}! How can I help you today?"
             
-            # Rerun to update chat
+            # Add confirmation message
+            st.session_state.messages.append({"role": "assistant", "content": confirmation_response})
+            
+            # Show confirmation
+            st.markdown(f'<div class="ai-message"><strong>MATRIX SYSTEM:</strong> {confirmation_response}</div>', unsafe_allow_html=True)
+            
             st.rerun()
+            
+        else:
+            # Normal conversation
+            # Add user message
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            
+            # Show user message
+            st.markdown(f'<div class="user-message"><strong>USER:</strong> {prompt}</div>', unsafe_allow_html=True)
+            
+            # Show typing indicator
+            with st.spinner("AI is thinking..."):
+                # Generate system prompt
+                system_prompt = get_personality_prompt(
+                    selected_persona, 
+                    sliders, 
+                    response_length, 
+                    st.session_state.custom_character
+                )
+                
+                # Get AI response
+                response = get_ai_response(st.session_state.messages, system_prompt, st.session_state.api_key)
+                
+                # Add AI response
+                st.session_state.messages.append({"role": "assistant", "content": response})
+                
+                # Show AI response with appropriate character name
+                character_name = st.session_state.custom_character.upper() if st.session_state.custom_character else selected_persona.upper()
+                st.markdown(f'<div class="ai-message"><strong>{character_name}:</strong> {response}</div>', unsafe_allow_html=True)
+                
+                st.rerun()
 
 st.markdown('</div>', unsafe_allow_html=True)
 
