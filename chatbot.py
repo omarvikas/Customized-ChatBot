@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for Matrix theme
+# Custom CSS for Matrix theme with personality backgrounds
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
@@ -74,6 +74,42 @@ st.markdown("""
     text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
 }
 
+/* Personality-themed chat backgrounds */
+.chat-container-custom {
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid #00ff41;
+}
+
+.chat-container-modi {
+    background: linear-gradient(135deg, rgba(255, 153, 51, 0.1) 0%, rgba(19, 136, 8, 0.1) 50%, rgba(0, 0, 255, 0.1) 100%);
+    border: 2px solid #ff9933;
+}
+
+.chat-container-bond {
+    background: linear-gradient(135deg, rgba(25, 25, 112, 0.2) 0%, rgba(0, 0, 0, 0.3) 100%);
+    border: 2px solid #c0c0c0;
+}
+
+.chat-container-sheldon {
+    background: linear-gradient(135deg, rgba(0, 100, 200, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 2px solid #0064c8;
+}
+
+.chat-container-stark {
+    background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%);
+    border: 2px solid #dc143c;
+}
+
+.chat-container-yoda {
+    background: linear-gradient(135deg, rgba(34, 139, 34, 0.15) 0%, rgba(85, 107, 47, 0.1) 100%);
+    border: 2px solid #228b22;
+}
+
+.chat-container-holmes {
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.15) 0%, rgba(105, 105, 105, 0.1) 100%);
+    border: 2px solid #8b4513;
+}
+
 /* Chat styling */
 .user-message {
     background: rgba(0, 100, 255, 0.2);
@@ -91,6 +127,42 @@ st.markdown("""
     margin: 8px 0;
     border-radius: 5px;
     color: #00ff41;
+}
+
+.ai-message-modi {
+    background: rgba(255, 153, 51, 0.1);
+    border-left: 4px solid #ff9933;
+    color: #ff9933;
+}
+
+.ai-message-bond {
+    background: rgba(192, 192, 192, 0.1);
+    border-left: 4px solid #c0c0c0;
+    color: #c0c0c0;
+}
+
+.ai-message-sheldon {
+    background: rgba(0, 100, 200, 0.1);
+    border-left: 4px solid #0064c8;
+    color: #0064c8;
+}
+
+.ai-message-stark {
+    background: rgba(220, 20, 60, 0.1);
+    border-left: 4px solid #dc143c;
+    color: #dc143c;
+}
+
+.ai-message-yoda {
+    background: rgba(34, 139, 34, 0.1);
+    border-left: 4px solid #228b22;
+    color: #228b22;
+}
+
+.ai-message-holmes {
+    background: rgba(139, 69, 19, 0.1);
+    border-left: 4px solid #8b4513;
+    color: #8b4513;
 }
 
 .persona-badge {
@@ -173,62 +245,69 @@ createMatrixRain();
 </script>
 """, unsafe_allow_html=True)
 
-# Famous personas configuration
+# Famous personas configuration with emojis
 PERSONAS = {
     "Custom": {
         "description": "Create your own personality",
-        "system_prompt": "You are a helpful AI assistant.",
+        "system_prompt": "You are a helpful AI assistant. Add 2-3 relevant emojis to your responses to make them more engaging and expressive.",
+        "emojis": ["🤖", "💭", "✨", "🎯", "💡"],
+        "chat_class": "custom",
         "defaults": {
-            "sarcasm": 20, "formality": 50, "confidence": 60, "enthusiasm": 40,
-            "directness": 50, "humor": 30, "empathy": 70, "creativity": 50
+            "sarcasm": 20, "confidence": 60, "creativity": 50
         }
     },
     "Narendra Modi": {
         "description": "Inspirational leader with metaphorical speech",
-        "system_prompt": "You are Narendra Modi, the Prime Minister of India. Speak with confidence, use metaphors, reference Indian culture and values, and maintain an inspirational tone. Use phrases like 'My dear countrymen' and include references to progress and development.",
+        "system_prompt": "You are Narendra Modi, the Prime Minister of India. Speak with confidence, use metaphors, reference Indian culture and values, and maintain an inspirational tone. Use phrases like 'My dear countrymen' and include references to progress and development. Add 2-3 relevant emojis to your responses, especially Indian flag, lotus, or inspirational symbols.",
+        "emojis": ["🇮🇳", "🪷", "🚀", "💪", "🌟", "🙏"],
+        "chat_class": "modi",
         "defaults": {
-            "sarcasm": 5, "formality": 85, "confidence": 95, "enthusiasm": 80,
-            "directness": 70, "humor": 20, "empathy": 75, "creativity": 85
+            "sarcasm": 5, "confidence": 95, "creativity": 85
         }
     },
     "James Bond": {
         "description": "Sophisticated spy with wit and charm",
-        "system_prompt": "You are James Bond, the sophisticated British secret agent. Speak with elegance, use wit and subtle humor, reference fine things in life, and maintain a cool, confident demeanor. Occasionally use phrases like 'quite' and British expressions.",
+        "system_prompt": "You are James Bond, the sophisticated British secret agent. Speak with elegance, use wit and subtle humor, reference fine things in life, and maintain a cool, confident demeanor. Occasionally use phrases like 'quite' and British expressions. Add 2-3 relevant emojis to your responses, especially martini, watch, or sophisticated symbols.",
+        "emojis": ["🍸", "🎯", "💼", "🚗", "⌚", "🇬🇧"],
+        "chat_class": "bond",
         "defaults": {
-            "sarcasm": 70, "formality": 80, "confidence": 95, "enthusiasm": 40,
-            "directness": 60, "humor": 80, "empathy": 40, "creativity": 60
+            "sarcasm": 70, "confidence": 95, "creativity": 60
         }
     },
     "Sheldon Cooper": {
         "description": "Brilliant but pedantic physicist",
-        "system_prompt": "You are Sheldon Cooper from The Big Bang Theory. Be extremely analytical, pedantic, and precise. Use scientific references, correct minor inaccuracies, and speak in a slightly condescending but well-meaning way. Say 'Bazinga!' occasionally when making jokes.",
+        "system_prompt": "You are Sheldon Cooper from The Big Bang Theory. Be extremely analytical, pedantic, and precise. Use scientific references, correct minor inaccuracies, and speak in a slightly condescending but well-meaning way. Say 'Bazinga!' occasionally when making jokes. Add 2-3 relevant emojis to your responses, especially scientific or nerdy symbols.",
+        "emojis": ["🧬", "🔬", "🧪", "📐", "🤓", "💡"],
+        "chat_class": "sheldon",
         "defaults": {
-            "sarcasm": 85, "formality": 90, "confidence": 100, "enthusiasm": 60,
-            "directness": 95, "humor": 40, "empathy": 15, "creativity": 30
+            "sarcasm": 85, "confidence": 100, "creativity": 30
         }
     },
     "Tony Stark": {
         "description": "Genius billionaire with attitude",
-        "system_prompt": "You are Tony Stark (Iron Man). Be witty, sarcastic, and incredibly confident. Reference technology, innovation, and your genius-level intellect. Use phrases like 'Obviously' and make pop culture references.",
+        "system_prompt": "You are Tony Stark (Iron Man). Be witty, sarcastic, and incredibly confident. Reference technology, innovation, and your genius-level intellect. Use phrases like 'Obviously' and make pop culture references. Add 2-3 relevant emojis to your responses, especially tech or superhero symbols.",
+        "emojis": ["🤖", "💰", "🔧", "⚡", "🎯", "🚀"],
+        "chat_class": "stark",
         "defaults": {
-            "sarcasm": 90, "formality": 30, "confidence": 100, "enthusiasm": 70,
-            "directness": 80, "humor": 85, "empathy": 50, "creativity": 95
+            "sarcasm": 90, "confidence": 100, "creativity": 95
         }
     },
     "Yoda": {
         "description": "Wise Jedi Master with unique speech",
-        "system_prompt": "You are Yoda, the wise Jedi Master. Speak with inverted sentence structure, use metaphors about the Force, and provide wisdom through cryptic but meaningful advice. Use phrases like 'Hmm' and 'Strong with the Force, you are.'",
+        "system_prompt": "You are Yoda, the wise Jedi Master. Speak with inverted sentence structure, use metaphors about the Force, and provide wisdom through cryptic but meaningful advice. Use phrases like 'Hmm' and 'Strong with the Force, you are.' Add 2-3 relevant emojis to your responses, especially Force or wisdom symbols.",
+        "emojis": ["🌟", "⚔️", "🧙", "🌌", "🔮", "☯️"],
+        "chat_class": "yoda",
         "defaults": {
-            "sarcasm": 10, "formality": 70, "confidence": 90, "enthusiasm": 30,
-            "directness": 40, "humor": 60, "empathy": 95, "creativity": 90
+            "sarcasm": 10, "confidence": 90, "creativity": 90
         }
     },
     "Sherlock Holmes": {
         "description": "Brilliant detective with deductive reasoning",
-        "system_prompt": "You are Sherlock Holmes, the brilliant detective. Use deductive reasoning, pay attention to minute details, and speak with intellectual superiority. Reference logic, observation, and deduction. Use phrases like 'Elementary' and 'The game is afoot.'",
+        "system_prompt": "You are Sherlock Holmes, the brilliant detective. Use deductive reasoning, pay attention to minute details, and speak with intellectual superiority. Reference logic, observation, and deduction. Use phrases like 'Elementary' and 'The game is afoot.' Add 2-3 relevant emojis to your responses, especially detective or mystery symbols.",
+        "emojis": ["🔍", "🕵️", "🧠", "📚", "🔎", "⚖️"],
+        "chat_class": "holmes",
         "defaults": {
-            "sarcasm": 60, "formality": 85, "confidence": 100, "enthusiasm": 50,
-            "directness": 90, "humor": 30, "empathy": 25, "creativity": 85
+            "sarcasm": 60, "confidence": 100, "creativity": 85
         }
     }
 }
@@ -254,11 +333,11 @@ def get_personality_prompt(persona: str, sliders: Dict[str, int], response_lengt
     
     # If custom character is provided, use it instead of preset personas
     if custom_character and persona == "Custom":
-        base_prompt = f"You are {custom_character}. Embody this character completely - their personality, speech patterns, mannerisms, and way of thinking. Stay in character throughout the conversation."
+        base_prompt = f"You are {custom_character}. Embody this character completely - their personality, speech patterns, mannerisms, and way of thinking. Stay in character throughout the conversation. Add 2-3 relevant emojis to your responses to make them more engaging and expressive."
     else:
         base_prompt = PERSONAS[persona]["system_prompt"]
     
-    # Add personality modifiers
+    # Add personality modifiers (reduced to 3 controls)
     modifiers = []
     
     if sliders["sarcasm"] > 70:
@@ -266,38 +345,13 @@ def get_personality_prompt(persona: str, sliders: Dict[str, int], response_lengt
     elif sliders["sarcasm"] < 30:
         modifiers.append("Be sincere and avoid sarcasm.")
     
-    if sliders["formality"] > 70:
-        modifiers.append("Use formal, professional language.")
-    elif sliders["formality"] < 30:
-        modifiers.append("Use casual, conversational language.")
-    
     if sliders["confidence"] > 80:
-        modifiers.append("Express yourself with absolute certainty.")
+        modifiers.append("Express yourself with absolute certainty and authority.")
     elif sliders["confidence"] < 40:
         modifiers.append("Express some uncertainty and use qualifying phrases.")
     
-    if sliders["enthusiasm"] > 70:
-        modifiers.append("Be very enthusiastic and energetic.")
-    elif sliders["enthusiasm"] < 30:
-        modifiers.append("Be calm and measured in your responses.")
-    
-    if sliders["directness"] > 70:
-        modifiers.append("Be direct and straight to the point.")
-    elif sliders["directness"] < 30:
-        modifiers.append("Be diplomatic and gentle in your approach.")
-    
-    if sliders["humor"] > 70:
-        modifiers.append("Include humor and jokes in your responses.")
-    elif sliders["humor"] < 30:
-        modifiers.append("Keep responses serious and professional.")
-    
-    if sliders["empathy"] > 70:
-        modifiers.append("Show deep understanding and emotional connection.")
-    elif sliders["empathy"] < 30:
-        modifiers.append("Focus on facts rather than emotions.")
-    
     if sliders["creativity"] > 70:
-        modifiers.append("Be creative and imaginative in your responses.")
+        modifiers.append("Be creative and imaginative in your responses with unique perspectives.")
     elif sliders["creativity"] < 30:
         modifiers.append("Stick to factual, straightforward information.")
     
@@ -338,6 +392,8 @@ def detect_character_request(text: str) -> str:
                 character_desc = character_desc.replace("a ", "").replace("an ", "").replace("the ", "")
                 return character_desc
     
+    return None
+
 def get_ai_response(messages: List[Dict], system_prompt: str, api_key: str) -> str:
     """Get response from OpenAI API"""
     try:
@@ -354,6 +410,23 @@ def get_ai_response(messages: List[Dict], system_prompt: str, api_key: str) -> s
         
     except Exception as e:
         return f"Error: {str(e)}"
+
+def get_chatbot_name(persona: str, custom_character: str = "") -> str:
+    """Get the chatbot name based on current persona"""
+    if custom_character and persona == "Custom":
+        return custom_character.title()
+    elif persona == "Custom":
+        return "Matrix Assistant"
+    else:
+        return persona
+
+def get_chat_container_class(persona: str) -> str:
+    """Get the CSS class for chat container based on persona"""
+    return PERSONAS[persona]["chat_class"]
+
+def get_ai_message_class(persona: str) -> str:
+    """Get the CSS class for AI messages based on persona"""
+    return f"ai-message-{PERSONAS[persona]['chat_class']}"
 
 # Sidebar for controls
 with st.sidebar:
@@ -409,19 +482,14 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Personality sliders
+    # Personality sliders (reduced to 3)
     st.markdown("**🎚️ Personality Controls:**")
     
     defaults = PERSONAS[selected_persona]["defaults"]
     
     sliders = {}
     sliders["sarcasm"] = st.slider("🗣️ Sarcasm Level", 0, 100, defaults["sarcasm"])
-    sliders["formality"] = st.slider("👔 Formality", 0, 100, defaults["formality"])
     sliders["confidence"] = st.slider("💪 Confidence", 0, 100, defaults["confidence"])
-    sliders["enthusiasm"] = st.slider("🔥 Enthusiasm", 0, 100, defaults["enthusiasm"])
-    sliders["directness"] = st.slider("🎯 Directness", 0, 100, defaults["directness"])
-    sliders["humor"] = st.slider("😄 Humor Level", 0, 100, defaults["humor"])
-    sliders["empathy"] = st.slider("❤️ Empathy", 0, 100, defaults["empathy"])
     sliders["creativity"] = st.slider("🎨 Creativity", 0, 100, defaults["creativity"])
     
     st.markdown("---")
@@ -442,8 +510,11 @@ with st.sidebar:
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Main chat interface
-st.markdown('<div class="terminal-container">', unsafe_allow_html=True)
-st.markdown('<div class="terminal-header">🤖 MATRIX CHATBOT INTERFACE</div>', unsafe_allow_html=True)
+chatbot_name = get_chatbot_name(selected_persona, st.session_state.custom_character)
+chat_container_class = get_chat_container_class(selected_persona)
+
+st.markdown(f'<div class="terminal-container chat-container-{chat_container_class}">', unsafe_allow_html=True)
+st.markdown(f'<div class="terminal-header">🤖 {chatbot_name.upper()} INTERFACE</div>', unsafe_allow_html=True)
 
 # Show current persona
 if st.session_state.custom_character:
@@ -453,21 +524,21 @@ else:
 
 # Initial greeting if no messages
 if not st.session_state.messages and st.session_state.api_key:
-    initial_greeting = """🤖 **Welcome to the Matrix ChatBot!**
+    initial_greeting = f"""🤖 **Welcome! I'm {chatbot_name}!**
     
-I can become any character you want me to be. Just tell me who you'd like me to act as!
+I can transform into any character you want me to be. Just tell me who you'd like me to act as! ✨
 
 **Examples:**
-- "Act like Sherlock Holmes"
-- "Behave like a pirate captain"
-- "Be like Albert Einstein"
-- "Talk like Shakespeare"
-- "Pretend to be a wise old wizard"
+- "Act like Sherlock Holmes" 🔍
+- "Behave like a pirate captain" 🏴‍☠️
+- "Be like Albert Einstein" 🧠
+- "Talk like Shakespeare" 📜
+- "Pretend to be a wise old wizard" 🧙
 
 **Or choose from preset personas in the sidebar:**
-- Narendra Modi, James Bond, Sheldon Cooper, Tony Stark, Yoda, Sherlock Holmes
+- Narendra Modi 🇮🇳, James Bond 🍸, Sheldon Cooper 🔬, Tony Stark 🤖, Yoda ⚔️, Sherlock Holmes 🔍
 
-*Who would you like me to become?*"""
+*Who would you like me to become?* 🎭"""
     
     st.markdown(f'<div class="ai-message"><strong>MATRIX SYSTEM:</strong> {initial_greeting}</div>', unsafe_allow_html=True)
 
@@ -478,10 +549,11 @@ with chat_container:
         if message["role"] == "user":
             st.markdown(f'<div class="user-message"><strong>USER:</strong> {message["content"]}</div>', unsafe_allow_html=True)
         else:
-            st.markdown(f'<div class="ai-message"><strong>{selected_persona.upper()}:</strong> {message["content"]}</div>', unsafe_allow_html=True)
+            ai_message_class = get_ai_message_class(selected_persona)
+            st.markdown(f'<div class="ai-message {ai_message_class}"><strong>{chatbot_name.upper()}:</strong> {message["content"]}</div>', unsafe_allow_html=True)
 
 # Chat input
-if prompt := st.chat_input("Enter your message to the Matrix..."):
+if prompt := st.chat_input(f"Enter your message to {chatbot_name}..."):
     if not st.session_state.api_key:
         st.error("Please enter your OpenAI API key in the sidebar!")
     else:
@@ -501,7 +573,7 @@ if prompt := st.chat_input("Enter your message to the Matrix..."):
             st.markdown(f'<div class="user-message"><strong>USER:</strong> {prompt}</div>', unsafe_allow_html=True)
             
             # Generate character confirmation response
-            confirmation_response = f"🎭 **Character Set!** I am now {st.session_state.custom_character}! How can I help you today?"
+            confirmation_response = f"🎭 **Character Set!** I am now {st.session_state.custom_character}! ✨ How can I help you today? 🤝"
             
             # Add confirmation message
             st.session_state.messages.append({"role": "assistant", "content": confirmation_response})
@@ -520,7 +592,7 @@ if prompt := st.chat_input("Enter your message to the Matrix..."):
             st.markdown(f'<div class="user-message"><strong>USER:</strong> {prompt}</div>', unsafe_allow_html=True)
             
             # Show typing indicator
-            with st.spinner("AI is thinking..."):
+            with st.spinner(f"{chatbot_name} is thinking..."):
                 # Generate system prompt
                 system_prompt = get_personality_prompt(
                     selected_persona, 
@@ -535,9 +607,9 @@ if prompt := st.chat_input("Enter your message to the Matrix..."):
                 # Add AI response
                 st.session_state.messages.append({"role": "assistant", "content": response})
                 
-                # Show AI response with appropriate character name
-                character_name = st.session_state.custom_character.upper() if st.session_state.custom_character else selected_persona.upper()
-                st.markdown(f'<div class="ai-message"><strong>{character_name}:</strong> {response}</div>', unsafe_allow_html=True)
+                # Show AI response with appropriate character name and styling
+                ai_message_class = get_ai_message_class(selected_persona)
+                st.markdown(f'<div class="ai-message {ai_message_class}"><strong>{chatbot_name.upper()}:</strong> {response}</div>', unsafe_allow_html=True)
                 
                 st.rerun()
 
@@ -545,4 +617,4 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
-st.markdown("**🔗 Matrix ChatBot** | Built with Streamlit & OpenAI GPT-4 | *Welcome to the Matrix...*")
+st.markdown(f"**🔗 {chatbot_name} ChatBot** | Built with Streamlit & OpenAI GPT-4 | *Welcome to the Matrix...* 🕶️")
