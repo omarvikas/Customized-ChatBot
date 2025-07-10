@@ -8,6 +8,18 @@ from typing import Dict, List, Tuple
 import os
 from datetime import datetime
 
+# Initialize session state early to avoid access errors
+if "api_key" not in st.session_state:
+    st.session_state.api_key = ""
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+if "current_persona" not in st.session_state:
+    st.session_state.current_persona = "Custom"
+if "character_set" not in st.session_state:
+    st.session_state.character_set = False
+if "custom_character" not in st.session_state:
+    st.session_state.custom_character = ""
+
 # Page config
 st.set_page_config(
     page_title="Matrix ChatBot",
