@@ -8,19 +8,20 @@ from datetime import datetime
 
 # Page config
 st.set_page_config(
-    page_title="Matrix ChatBot",
-    page_icon="🤖",
+    page_title="Multi-Personality Chat Arena",
+    page_icon="🎭",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for Matrix theme with personality backgrounds
+# Custom CSS for vibrant personality themes
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-/* Matrix Rain Background */
-.matrix-bg {
+/* Animated Background */
+.main-bg {
     position: fixed;
     top: 0;
     left: 0;
@@ -28,287 +29,358 @@ st.markdown("""
     height: 100%;
     pointer-events: none;
     z-index: -1;
-    background: #000;
-    overflow: hidden;
+    background: linear-gradient(45deg, #1e3c72, #2a5298, #1e3c72, #2a5298);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
 }
 
-.matrix-rain {
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Floating particles */
+.particle {
     position: absolute;
-    top: -100px;
-    font-family: 'Orbitron', monospace;
-    font-size: 14px;
-    color: #00ff41;
-    animation: rain 3s linear infinite;
-    opacity: 0.6;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
 }
 
-@keyframes rain {
-    0% { transform: translateY(-100px); opacity: 1; }
-    100% { transform: translateY(100vh); opacity: 0; }
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+    50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
 }
 
 /* Main App Styling */
 .stApp {
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-    color: #00ff41;
-    font-family: 'Orbitron', monospace;
+    background: transparent;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* Terminal-style containers */
-.terminal-container {
-    background: rgba(0, 0, 0, 0.85);
-    border: 2px solid #00ff41;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 10px 0;
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-    backdrop-filter: blur(10px);
+/* Vibrant containers */
+.chat-arena {
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.9), rgba(42, 82, 152, 0.9));
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 15px 0;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    position: relative;
+    overflow: hidden;
 }
 
-.terminal-header {
-    color: #00ff41;
-    font-size: 18px;
+.chat-arena::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.arena-header {
+    color: #ffffff;
+    font-size: 24px;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-align: center;
-    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+    background-size: 400% 400%;
+    animation: textGradient 4s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-/* Personality-themed chat backgrounds */
-.chat-container-custom {
-    background: rgba(0, 0, 0, 0.85);
-    border: 2px solid #00ff41;
+@keyframes textGradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
-.chat-container-modi {
-    background: linear-gradient(135deg, rgba(255, 153, 51, 0.1) 0%, rgba(19, 136, 8, 0.1) 50%, rgba(0, 0, 255, 0.1) 100%);
-    border: 2px solid #ff9933;
-}
-
-.chat-container-bond {
-    background: linear-gradient(135deg, rgba(25, 25, 112, 0.2) 0%, rgba(0, 0, 0, 0.3) 100%);
-    border: 2px solid #c0c0c0;
-}
-
-.chat-container-sheldon {
-    background: linear-gradient(135deg, rgba(0, 100, 200, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-    border: 2px solid #0064c8;
-}
-
-.chat-container-stark {
-    background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%);
-    border: 2px solid #dc143c;
-}
-
-.chat-container-yoda {
-    background: linear-gradient(135deg, rgba(34, 139, 34, 0.15) 0%, rgba(85, 107, 47, 0.1) 100%);
-    border: 2px solid #228b22;
-}
-
-.chat-container-holmes {
-    background: linear-gradient(135deg, rgba(139, 69, 19, 0.15) 0%, rgba(105, 105, 105, 0.1) 100%);
-    border: 2px solid #8b4513;
-}
-
-/* Chat styling */
+/* Personality-themed chat styling */
 .user-message {
-    background: rgba(0, 100, 255, 0.2);
-    border-left: 4px solid #0064ff;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 5px;
-    color: #87ceeb;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 15px;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
-.ai-message {
-    background: rgba(0, 255, 65, 0.1);
-    border-left: 4px solid #00ff41;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 5px;
-    color: #00ff41;
+.user-message::before {
+    content: '👤';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+}
+
+/* AI message styles for each persona */
+.ai-message-custom {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid #667eea;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
 .ai-message-modi {
-    background: rgba(255, 153, 51, 0.1);
-    border-left: 4px solid #ff9933;
-    color: #ff9933;
+    background: linear-gradient(135deg, #ff9933 0%, #138808 50%, #0064ff 100%);
+    border: 2px solid #ff9933;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(255, 153, 51, 0.4);
 }
 
 .ai-message-bond {
-    background: rgba(192, 192, 192, 0.1);
-    border-left: 4px solid #c0c0c0;
-    color: #c0c0c0;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #ecf0f1 100%);
+    border: 2px solid #ecf0f1;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(236, 240, 241, 0.3);
 }
 
 .ai-message-sheldon {
-    background: rgba(0, 100, 200, 0.1);
-    border-left: 4px solid #0064c8;
-    color: #0064c8;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 50%, #ecf0f1 100%);
+    border: 2px solid #3498db;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
 }
 
 .ai-message-stark {
-    background: rgba(220, 20, 60, 0.1);
-    border-left: 4px solid #dc143c;
-    color: #dc143c;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #f1c40f 100%);
+    border: 2px solid #e74c3c;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
 }
 
 .ai-message-yoda {
-    background: rgba(34, 139, 34, 0.1);
-    border-left: 4px solid #228b22;
-    color: #228b22;
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 50%, #16a085 100%);
+    border: 2px solid #27ae60;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
 }
 
 .ai-message-holmes {
-    background: rgba(139, 69, 19, 0.1);
-    border-left: 4px solid #8b4513;
-    color: #8b4513;
+    background: linear-gradient(135deg, #8b4513 0%, #a0522d 50%, #d2691e 100%);
+    border: 2px solid #8b4513;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
 }
 
-.persona-badge {
-    background: rgba(255, 0, 100, 0.3);
-    color: #ff0064;
-    padding: 4px 8px;
+.ai-message {
+    padding: 15px;
+    margin: 10px 0;
     border-radius: 15px;
-    font-size: 12px;
-    font-weight: bold;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Slider styling */
-.stSlider > div > div > div {
-    background: #00ff41;
+.ai-message::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: messageShine 4s ease-in-out infinite;
+}
+
+@keyframes messageShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.persona-selector {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 10px 0;
+    backdrop-filter: blur(10px);
+}
+
+.persona-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.persona-card:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+.persona-card.selected {
+    background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    border-color: #4ecdc4;
+    color: #ffffff;
+}
+
+.thinking-indicator {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    animation: pulse 2s infinite;
+    display: inline-block;
+    margin: 5px 0;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Sidebar styling */
+.sidebar {
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.95), rgba(42, 82, 152, 0.95));
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(15px);
 }
 
 /* Button styling */
 .stButton > button {
-    background: linear-gradient(45deg, #00ff41, #00cc33);
-    color: black;
+    background: linear-gradient(45deg, #4ecdc4, #44a08d);
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
+    padding: 10px 20px;
     font-weight: bold;
     transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .stButton > button:hover {
-    background: linear-gradient(45deg, #00cc33, #00ff41);
-    box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+    background: linear-gradient(45deg, #44a08d, #4ecdc4);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(68, 160, 141, 0.4);
 }
 
-/* Sidebar styling */
-.css-1d391kg {
-    background: rgba(0, 0, 0, 0.9);
-    border-right: 2px solid #00ff41;
+/* Checkbox styling */
+.stCheckbox > label {
+    color: #ffffff !important;
+    font-weight: 500;
 }
 
-.typing-indicator {
-    color: #00ff41;
-    animation: blink 1s infinite;
+/* Select box styling */
+.stSelectbox > label {
+    color: #ffffff !important;
+    font-weight: 500;
 }
 
-@keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+/* Text input styling */
+.stTextInput > label {
+    color: #ffffff !important;
+    font-weight: 500;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# Matrix rain effect
+# Add animated background
 st.markdown("""
-<div class="matrix-bg" id="matrix-container"></div>
+<div class="main-bg"></div>
 <script>
-function createMatrixRain() {
-    const container = document.getElementById('matrix-container');
-    const characters = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-    
-    function createRainDrop() {
-        const drop = document.createElement('div');
-        drop.className = 'matrix-rain';
-        drop.style.left = Math.random() * 100 + '%';
-        drop.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        drop.style.opacity = Math.random() * 0.8 + 0.2;
-        drop.textContent = characters[Math.floor(Math.random() * characters.length)];
-        container.appendChild(drop);
-        
-        setTimeout(() => {
-            if (drop.parentNode) {
-                drop.parentNode.removeChild(drop);
-            }
-        }, 5000);
+// Create floating particles
+function createParticles() {
+    const particleCount = 50;
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        document.body.appendChild(particle);
     }
-    
-    setInterval(createRainDrop, 100);
 }
 
-// Start the rain effect
-createMatrixRain();
+// Initialize particles
+createParticles();
 </script>
 """, unsafe_allow_html=True)
 
-# Famous personas configuration with emojis
+# Enhanced personas with conversation abilities
 PERSONAS = {
     "Custom": {
-        "description": "Create your own personality",
-        "system_prompt": "You are a helpful AI assistant. Add 2-3 relevant emojis to your responses to make them more engaging and expressive.",
+        "name": "Matrix Assistant",
+        "description": "Helpful AI assistant",
+        "system_prompt": "You are a helpful AI assistant participating in a group chat. Add 2-3 relevant emojis to your responses. When other AI personalities speak, you can respond to them directly, ask questions, or build on their ideas. Be collaborative and engaging.",
         "emojis": ["🤖", "💭", "✨", "🎯", "💡"],
         "chat_class": "custom",
-        "defaults": {
-            "sarcasm": 20, "confidence": 60, "creativity": 50
-        }
+        "defaults": {"sarcasm": 20, "confidence": 60, "creativity": 50}
     },
     "Narendra Modi": {
-        "description": "Inspirational leader with metaphorical speech",
-        "system_prompt": "You are Narendra Modi, the Prime Minister of India. Speak with confidence, use metaphors, reference Indian culture and values, and maintain an inspirational tone. Use phrases like 'My dear countrymen' and include references to progress and development. Add 2-3 relevant emojis to your responses, especially Indian flag, lotus, or inspirational symbols.",
+        "name": "Narendra Modi",
+        "description": "Prime Minister of India - Inspirational leader",
+        "system_prompt": "You are Narendra Modi participating in a group chat. Use inspirational language, metaphors, and references to Indian culture. Add 2-3 relevant emojis including 🇮🇳, 🪷, 🚀. When other personalities speak, you can respond with your perspective, share wisdom, or ask thoughtful questions. Use phrases like 'My friends' when addressing the group.",
         "emojis": ["🇮🇳", "🪷", "🚀", "💪", "🌟", "🙏"],
         "chat_class": "modi",
-        "defaults": {
-            "sarcasm": 5, "confidence": 95, "creativity": 85
-        }
+        "defaults": {"sarcasm": 5, "confidence": 95, "creativity": 85}
     },
     "James Bond": {
-        "description": "Sophisticated spy with wit and charm",
-        "system_prompt": "You are James Bond, the sophisticated British secret agent. Speak with elegance, use wit and subtle humor, reference fine things in life, and maintain a cool, confident demeanor. Occasionally use phrases like 'quite' and British expressions. Add 2-3 relevant emojis to your responses, especially martini, watch, or sophisticated symbols.",
+        "name": "James Bond",
+        "description": "British Secret Agent - Sophisticated spy",
+        "system_prompt": "You are James Bond participating in a group chat. Be sophisticated, witty, and charming. Add 2-3 relevant emojis including 🍸, 🎯, 💼. When other personalities speak, you can respond with wit, make sophisticated observations, or share spy-like insights. Use British expressions and maintain your cool demeanor.",
         "emojis": ["🍸", "🎯", "💼", "🚗", "⌚", "🇬🇧"],
         "chat_class": "bond",
-        "defaults": {
-            "sarcasm": 70, "confidence": 95, "creativity": 60
-        }
+        "defaults": {"sarcasm": 70, "confidence": 95, "creativity": 60}
     },
     "Sheldon Cooper": {
-        "description": "Brilliant but pedantic physicist",
-        "system_prompt": "You are Sheldon Cooper from The Big Bang Theory. Be extremely analytical, pedantic, and precise. Use scientific references, correct minor inaccuracies, and speak in a slightly condescending but well-meaning way. Say 'Bazinga!' occasionally when making jokes. Add 2-3 relevant emojis to your responses, especially scientific or nerdy symbols.",
+        "name": "Sheldon Cooper",
+        "description": "Theoretical Physicist - Genius but pedantic",
+        "system_prompt": "You are Sheldon Cooper participating in a group chat. Be analytical, pedantic, and scientifically precise. Add 2-3 relevant emojis including 🧬, 🔬, 🧪. When other personalities speak, you can correct them, provide scientific explanations, or make condescending but well-meaning comments. Use 'Bazinga!' occasionally and reference scientific concepts.",
         "emojis": ["🧬", "🔬", "🧪", "📐", "🤓", "💡"],
         "chat_class": "sheldon",
-        "defaults": {
-            "sarcasm": 85, "confidence": 100, "creativity": 30
-        }
+        "defaults": {"sarcasm": 85, "confidence": 100, "creativity": 30}
     },
     "Tony Stark": {
-        "description": "Genius billionaire with attitude",
-        "system_prompt": "You are Tony Stark (Iron Man). Be witty, sarcastic, and incredibly confident. Reference technology, innovation, and your genius-level intellect. Use phrases like 'Obviously' and make pop culture references. Add 2-3 relevant emojis to your responses, especially tech or superhero symbols.",
+        "name": "Tony Stark",
+        "description": "Iron Man - Genius billionaire inventor",
+        "system_prompt": "You are Tony Stark participating in a group chat. Be witty, sarcastic, and incredibly confident. Add 2-3 relevant emojis including 🤖, 💰, 🔧. When other personalities speak, you can make witty comebacks, show off your intellect, or reference technology. Use phrases like 'Obviously' and make pop culture references.",
         "emojis": ["🤖", "💰", "🔧", "⚡", "🎯", "🚀"],
         "chat_class": "stark",
-        "defaults": {
-            "sarcasm": 90, "confidence": 100, "creativity": 95
-        }
+        "defaults": {"sarcasm": 90, "confidence": 100, "creativity": 95}
     },
     "Yoda": {
-        "description": "Wise Jedi Master with unique speech",
-        "system_prompt": "You are Yoda, the wise Jedi Master. Speak with inverted sentence structure, use metaphors about the Force, and provide wisdom through cryptic but meaningful advice. Use phrases like 'Hmm' and 'Strong with the Force, you are.' Add 2-3 relevant emojis to your responses, especially Force or wisdom symbols.",
+        "name": "Yoda",
+        "description": "Jedi Master - Wise and mystical",
+        "system_prompt": "You are Yoda participating in a group chat. Speak with inverted sentence structure and provide wisdom. Add 2-3 relevant emojis including 🌟, ⚔️, 🧙. When other personalities speak, you can offer wisdom, make cryptic but meaningful comments, or provide guidance. Use phrases like 'Hmm' and reference the Force.",
         "emojis": ["🌟", "⚔️", "🧙", "🌌", "🔮", "☯️"],
         "chat_class": "yoda",
-        "defaults": {
-            "sarcasm": 10, "confidence": 90, "creativity": 90
-        }
+        "defaults": {"sarcasm": 10, "confidence": 90, "creativity": 90}
     },
     "Sherlock Holmes": {
-        "description": "Brilliant detective with deductive reasoning",
-        "system_prompt": "You are Sherlock Holmes, the brilliant detective. Use deductive reasoning, pay attention to minute details, and speak with intellectual superiority. Reference logic, observation, and deduction. Use phrases like 'Elementary' and 'The game is afoot.' Add 2-3 relevant emojis to your responses, especially detective or mystery symbols.",
+        "name": "Sherlock Holmes",
+        "description": "Consulting Detective - Master of deduction",
+        "system_prompt": "You are Sherlock Holmes participating in a group chat. Use deductive reasoning and pay attention to details. Add 2-3 relevant emojis including 🔍, 🕵️, 🧠. When other personalities speak, you can analyze their statements, make deductions, or point out logical inconsistencies. Use phrases like 'Elementary' and 'I observe that...'",
         "emojis": ["🔍", "🕵️", "🧠", "📚", "🔎", "⚖️"],
         "chat_class": "holmes",
-        "defaults": {
-            "sarcasm": 60, "confidence": 100, "creativity": 85
-        }
+        "defaults": {"sarcasm": 60, "confidence": 100, "creativity": 85}
     }
 }
 
@@ -319,25 +391,25 @@ if "messages" not in st.session_state:
 if "api_key" not in st.session_state:
     st.session_state.api_key = ""
 
-if "current_persona" not in st.session_state:
-    st.session_state.current_persona = "Custom"
+if "active_personas" not in st.session_state:
+    st.session_state.active_personas = ["Custom"]
 
-if "character_set" not in st.session_state:
-    st.session_state.character_set = False
+if "conversation_mode" not in st.session_state:
+    st.session_state.conversation_mode = "User Only"
 
-if "custom_character" not in st.session_state:
-    st.session_state.custom_character = ""
+if "auto_respond" not in st.session_state:
+    st.session_state.auto_respond = False
 
-def get_personality_prompt(persona: str, sliders: Dict[str, int], response_length: str, custom_character: str = "") -> str:
-    """Generate personality-based system prompt"""
+def get_personality_prompt(persona: str, sliders: Dict[str, int], all_active_personas: List[str]) -> str:
+    """Generate personality-based system prompt for group chat"""
+    base_prompt = PERSONAS[persona]["system_prompt"]
     
-    # If custom character is provided, use it instead of preset personas
-    if custom_character and persona == "Custom":
-        base_prompt = f"You are {custom_character}. Embody this character completely - their personality, speech patterns, mannerisms, and way of thinking. Stay in character throughout the conversation. Add 2-3 relevant emojis to your responses to make them more engaging and expressive."
-    else:
-        base_prompt = PERSONAS[persona]["system_prompt"]
+    # Add context about other active personas
+    if len(all_active_personas) > 1:
+        other_personas = [p for p in all_active_personas if p != persona]
+        base_prompt += f"\n\nOther AI personalities in this conversation: {', '.join(other_personas)}. You can interact with them, respond to their messages, ask them questions, or build on their ideas."
     
-    # Add personality modifiers (reduced to 3 controls)
+    # Add personality modifiers
     modifiers = []
     
     if sliders["sarcasm"] > 70:
@@ -355,44 +427,11 @@ def get_personality_prompt(persona: str, sliders: Dict[str, int], response_lengt
     elif sliders["creativity"] < 30:
         modifiers.append("Stick to factual, straightforward information.")
     
-    # Response length
-    length_map = {
-        "Concise": "Keep responses to 1-2 sentences, be very brief.",
-        "Balanced": "Provide 2-3 paragraphs of balanced explanation.",
-        "Detailed": "Give comprehensive, detailed explanations with examples.",
-        "Verbose": "Provide extremely thorough, academic-style responses."
-    }
-    
-    modifiers.append(length_map[response_length])
-    
     # Combine all elements
-    full_prompt = base_prompt
     if modifiers:
-        full_prompt += "\n\nPersonality modifiers:\n" + "\n".join(f"- {mod}" for mod in modifiers)
+        base_prompt += "\n\nPersonality modifiers:\n" + "\n".join(f"- {mod}" for mod in modifiers)
     
-    return full_prompt
-
-def detect_character_request(text: str) -> str:
-    """Detect if user is describing a character they want the AI to act as"""
-    keywords = [
-        "act like", "act as", "be like", "behave like", "pretend to be", "roleplay as",
-        "talk like", "speak like", "become", "transform into", "channel", "embody",
-        "i want you to be", "you are now", "from now on you are", "you should act"
-    ]
-    
-    text_lower = text.lower()
-    
-    for keyword in keywords:
-        if keyword in text_lower:
-            # Extract the character description after the keyword
-            parts = text_lower.split(keyword, 1)
-            if len(parts) > 1:
-                character_desc = parts[1].strip()
-                # Clean up common prefixes
-                character_desc = character_desc.replace("a ", "").replace("an ", "").replace("the ", "")
-                return character_desc
-    
-    return None
+    return base_prompt
 
 def get_ai_response(messages: List[Dict], system_prompt: str, api_key: str) -> str:
     """Get response from OpenAI API"""
@@ -403,7 +442,7 @@ def get_ai_response(messages: List[Dict], system_prompt: str, api_key: str) -> s
             model="gpt-4",
             messages=[{"role": "system", "content": system_prompt}] + messages,
             temperature=0.7,
-            max_tokens=1500
+            max_tokens=1000
         )
         
         return response.choices[0].message.content
@@ -411,210 +450,222 @@ def get_ai_response(messages: List[Dict], system_prompt: str, api_key: str) -> s
     except Exception as e:
         return f"Error: {str(e)}"
 
-def get_chatbot_name(persona: str, custom_character: str = "") -> str:
-    """Get the chatbot name based on current persona"""
-    if custom_character and persona == "Custom":
-        return custom_character.title()
-    elif persona == "Custom":
-        return "Matrix Assistant"
-    else:
-        return persona
-
-def get_chat_container_class(persona: str) -> str:
-    """Get the CSS class for chat container based on persona"""
-    return PERSONAS[persona]["chat_class"]
-
-def get_ai_message_class(persona: str) -> str:
-    """Get the CSS class for AI messages based on persona"""
-    return f"ai-message-{PERSONAS[persona]['chat_class']}"
+def should_persona_respond(persona: str, last_message: str, messages: List[Dict]) -> bool:
+    """Determine if a persona should respond based on context"""
+    if not messages:
+        return False
+    
+    # Always respond if directly mentioned
+    if persona.lower() in last_message.lower():
+        return True
+    
+    # Random chance to join conversation (30% for active engagement)
+    if random.random() < 0.3:
+        return True
+    
+    # Respond if the topic relates to their expertise
+    persona_triggers = {
+        "Modi": ["india", "leadership", "development", "progress", "nation"],
+        "Bond": ["mission", "spy", "elegant", "sophisticated", "danger"],
+        "Sheldon": ["science", "physics", "theory", "logic", "research"],
+        "Stark": ["technology", "innovation", "engineering", "genius", "money"],
+        "Yoda": ["wisdom", "force", "patience", "learning", "balance"],
+        "Holmes": ["mystery", "deduction", "evidence", "logic", "crime"]
+    }
+    
+    if persona in persona_triggers:
+        for trigger in persona_triggers[persona]:
+            if trigger in last_message.lower():
+                return True
+    
+    return False
 
 # Sidebar for controls
 with st.sidebar:
-    st.markdown('<div class="terminal-container">', unsafe_allow_html=True)
-    st.markdown('<div class="terminal-header">⚙️ MATRIX CONTROL PANEL</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar">', unsafe_allow_html=True)
+    st.markdown('<div class="arena-header">🎛️ CHAT ARENA CONTROL</div>', unsafe_allow_html=True)
     
     # API Key input
     st.markdown("**🔑 OpenAI API Key:**")
-    
-    # Try to get API key from secrets (for Streamlit Cloud)
     try:
         api_key = st.secrets["OPENAI_API_KEY"]
         st.session_state.api_key = api_key
-        st.success("✅ API Key loaded from secrets")
+        st.success("✅ API Key loaded")
     except:
-        # Fallback to manual input (for local development)
         api_key = st.text_input("Enter your OpenAI API key", type="password", value=st.session_state.api_key)
         if api_key:
             st.session_state.api_key = api_key
     
-    # Show current character info
-    if st.session_state.custom_character:
-        st.markdown("---")
-        st.markdown("**🎭 Current Character:**")
-        st.markdown(f"*Acting as: {st.session_state.custom_character}*")
-        st.markdown("*You can change character anytime by saying 'Act like...' or 'Be like...'*")
+    st.markdown("---")
+    
+    # Persona Selection
+    st.markdown("**🎭 Select Active Personalities:**")
+    st.markdown("*Choose which AI personalities can participate in the chat*")
+    
+    selected_personas = []
+    for persona, config in PERSONAS.items():
+        is_selected = st.checkbox(
+            f"{config['emojis'][0]} {config['name']}", 
+            value=persona in st.session_state.active_personas,
+            key=f"persona_{persona}"
+        )
+        if is_selected:
+            selected_personas.append(persona)
+    
+    if selected_personas != st.session_state.active_personas:
+        st.session_state.active_personas = selected_personas
     
     st.markdown("---")
     
-    # Persona selection
-    st.markdown("**🎭 Choose Persona:**")
-    selected_persona = st.selectbox(
-        "Select a personality",
-        list(PERSONAS.keys()),
-        index=list(PERSONAS.keys()).index(st.session_state.current_persona)
+    # Conversation Mode
+    st.markdown("**💬 Conversation Mode:**")
+    conversation_mode = st.selectbox(
+        "How should AIs respond?",
+        ["User Only", "Auto-Respond", "Manual Trigger"],
+        help="User Only: Only respond to user messages\nAuto-Respond: AIs can respond to each other automatically\nManual Trigger: Click button to make AIs respond"
     )
+    st.session_state.conversation_mode = conversation_mode
     
-    if selected_persona != st.session_state.current_persona:
-        st.session_state.current_persona = selected_persona
-        st.rerun()
-    
-    # Show persona description
-    st.markdown(f"*{PERSONAS[selected_persona]['description']}*")
+    # Auto-respond settings
+    if conversation_mode == "Auto-Respond":
+        st.session_state.auto_respond = st.checkbox("Enable AI-to-AI conversations", value=True)
     
     st.markdown("---")
     
-    # Response length
-    st.markdown("**📏 Response Length:**")
-    response_length = st.selectbox(
-        "Choose response style",
-        ["Concise", "Balanced", "Detailed", "Verbose"]
-    )
-    
-    st.markdown("---")
-    
-    # Personality sliders (reduced to 3)
-    st.markdown("**🎚️ Personality Controls:**")
-    
-    defaults = PERSONAS[selected_persona]["defaults"]
-    
-    sliders = {}
-    sliders["sarcasm"] = st.slider("🗣️ Sarcasm Level", 0, 100, defaults["sarcasm"])
-    sliders["confidence"] = st.slider("💪 Confidence", 0, 100, defaults["confidence"])
-    sliders["creativity"] = st.slider("🎨 Creativity", 0, 100, defaults["creativity"])
+    # Personality controls (simplified)
+    st.markdown("**🎚️ Global Personality Settings:**")
+    sliders = {
+        "sarcasm": st.slider("🗣️ Sarcasm Level", 0, 100, 50),
+        "confidence": st.slider("💪 Confidence", 0, 100, 70),
+        "creativity": st.slider("🎨 Creativity", 0, 100, 60)
+    }
     
     st.markdown("---")
     
     # Control buttons
-    if st.button("🔄 Reset Character"):
-        st.session_state.custom_character = ""
-        st.session_state.character_set = False
-        st.session_state.current_persona = "Custom"
+    if st.button("🔄 Reset Chat"):
+        st.session_state.messages = []
         st.rerun()
     
-    if st.button("🗑️ Clear Chat History"):
-        st.session_state.messages = []
-        st.session_state.character_set = False
-        st.session_state.custom_character = ""
-        st.rerun()
+    if st.button("🎲 Random Response") and st.session_state.active_personas:
+        if st.session_state.api_key and st.session_state.messages:
+            random_persona = random.choice(st.session_state.active_personas)
+            st.session_state.trigger_persona = random_persona
+            st.rerun()
     
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Main chat interface
-chatbot_name = get_chatbot_name(selected_persona, st.session_state.custom_character)
-chat_container_class = get_chat_container_class(selected_persona)
+st.markdown('<div class="chat-arena">', unsafe_allow_html=True)
+st.markdown('<div class="arena-header">🎭 MULTI-PERSONALITY CHAT ARENA</div>', unsafe_allow_html=True)
 
-st.markdown(f'<div class="terminal-container chat-container-{chat_container_class}">', unsafe_allow_html=True)
-st.markdown(f'<div class="terminal-header">🤖 {chatbot_name.upper()} INTERFACE</div>', unsafe_allow_html=True)
-
-# Show current persona
-if st.session_state.custom_character:
-    st.markdown(f'<span class="persona-badge">Current Character: {st.session_state.custom_character}</span>', unsafe_allow_html=True)
+# Show active personas
+if st.session_state.active_personas:
+    st.markdown("**🎪 Active Personalities:**")
+    persona_badges = []
+    for persona in st.session_state.active_personas:
+        config = PERSONAS[persona]
+        persona_badges.append(f"{config['emojis'][0]} {config['name']}")
+    st.markdown(" • ".join(persona_badges))
 else:
-    st.markdown(f'<span class="persona-badge">Current Persona: {selected_persona}</span>', unsafe_allow_html=True)
+    st.warning("⚠️ Please select at least one personality to start chatting!")
 
-# Initial greeting if no messages
-if not st.session_state.messages and st.session_state.api_key:
-    initial_greeting = f"""🤖 **Welcome! I'm {chatbot_name}!**
-    
-I can transform into any character you want me to be. Just tell me who you'd like me to act as! ✨
-
-**Examples:**
-- "Act like Sherlock Holmes" 🔍
-- "Behave like a pirate captain" 🏴‍☠️
-- "Be like Albert Einstein" 🧠
-- "Talk like Shakespeare" 📜
-- "Pretend to be a wise old wizard" 🧙
-
-**Or choose from preset personas in the sidebar:**
-- Narendra Modi 🇮🇳, James Bond 🍸, Sheldon Cooper 🔬, Tony Stark 🤖, Yoda ⚔️, Sherlock Holmes 🔍
-
-*Who would you like me to become?* 🎭"""
-    
-    st.markdown(f'<div class="ai-message"><strong>MATRIX SYSTEM:</strong> {initial_greeting}</div>', unsafe_allow_html=True)
+st.markdown("---")
 
 # Chat history
 chat_container = st.container()
 with chat_container:
     for message in st.session_state.messages:
         if message["role"] == "user":
-            st.markdown(f'<div class="user-message"><strong>USER:</strong> {message["content"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="user-message"><strong>YOU:</strong> {message["content"]}</div>', unsafe_allow_html=True)
         else:
-            ai_message_class = get_ai_message_class(selected_persona)
-            st.markdown(f'<div class="ai-message {ai_message_class}"><strong>{chatbot_name.upper()}:</strong> {message["content"]}</div>', unsafe_allow_html=True)
+            persona = message.get("persona", "Custom")
+            if persona in PERSONAS:
+                config = PERSONAS[persona]
+                message_class = f"ai-message-{config['chat_class']}"
+                st.markdown(f'<div class="ai-message {message_class}"><strong>{config["name"].upper()}:</strong> {message["content"]}</div>', unsafe_allow_html=True)
+
+# Manual trigger section
+if st.session_state.conversation_mode == "Manual Trigger" and st.session_state.active_personas:
+    st.markdown("**🎯 Trigger AI Response:**")
+    cols = st.columns(len(st.session_state.active_personas))
+    for i, persona in enumerate(st.session_state.active_personas):
+        with cols[i]:
+            if st.button(f"💬 {PERSONAS[persona]['name']}", key=f"trigger_{persona}"):
+                st.session_state.trigger_persona = persona
+                st.rerun()
 
 # Chat input
-if prompt := st.chat_input(f"Enter your message to {chatbot_name}..."):
+if prompt := st.chat_input("Enter your message to the arena..."):
     if not st.session_state.api_key:
         st.error("Please enter your OpenAI API key in the sidebar!")
+    elif not st.session_state.active_personas:
+        st.error("Please select at least one personality in the sidebar!")
     else:
-        # Check if user is describing a character
-        character_request = detect_character_request(prompt)
+        # Add user message
+        st.session_state.messages.append({"role": "user", "content": prompt})
         
-        if character_request and not st.session_state.character_set:
-            # User is setting a custom character
-            st.session_state.custom_character = character_request
-            st.session_state.character_set = True
-            st.session_state.current_persona = "Custom"
-            
-            # Add user message
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            
-            # Show user message
-            st.markdown(f'<div class="user-message"><strong>USER:</strong> {prompt}</div>', unsafe_allow_html=True)
-            
-            # Generate character confirmation response
-            confirmation_response = f"🎭 **Character Set!** I am now {st.session_state.custom_character}! ✨ How can I help you today? 🤝"
-            
-            # Add confirmation message
-            st.session_state.messages.append({"role": "assistant", "content": confirmation_response})
-            
-            # Show confirmation
-            st.markdown(f'<div class="ai-message"><strong>MATRIX SYSTEM:</strong> {confirmation_response}</div>', unsafe_allow_html=True)
-            
-            st.rerun()
-            
-        else:
-            # Normal conversation
-            # Add user message
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            
-            # Show user message
-            st.markdown(f'<div class="user-message"><strong>USER:</strong> {prompt}</div>', unsafe_allow_html=True)
-            
-            # Show typing indicator
-            with st.spinner(f"{chatbot_name} is thinking..."):
-                # Generate system prompt
-                system_prompt = get_personality_prompt(
-                    selected_persona, 
-                    sliders, 
-                    response_length, 
-                    st.session_state.custom_character
-                )
-                
-                # Get AI response
+        # Show user message
+        st.markdown(f'<div class="user-message"><strong>YOU:</strong> {prompt}</div>', unsafe_allow_html=True)
+        
+        # Get responses from active personas
+        responses_to_generate = []
+        
+        if st.session_state.conversation_mode == "User Only":
+            # Only one random persona responds to user
+            responses_to_generate = [random.choice(st.session_state.active_personas)]
+        elif st.session_state.conversation_mode == "Auto-Respond":
+            # Multiple personas might respond
+            for persona in st.session_state.active_personas:
+                if should_persona_respond(persona, prompt, st.session_state.messages):
+                    responses_to_generate.append(persona)
+        
+        # Generate responses
+        for persona in responses_to_generate:
+            with st.spinner(f"{PERSONAS[persona]['name']} is thinking..."):
+                system_prompt = get_personality_prompt(persona, sliders, st.session_state.active_personas)
                 response = get_ai_response(st.session_state.messages, system_prompt, st.session_state.api_key)
                 
                 # Add AI response
-                st.session_state.messages.append({"role": "assistant", "content": response})
+                st.session_state.messages.append({
+                    "role": "assistant", 
+                    "content": response,
+                    "persona": persona
+                })
                 
-                # Show AI response with appropriate character name and styling
-                ai_message_class = get_ai_message_class(selected_persona)
-                st.markdown(f'<div class="ai-message {ai_message_class}"><strong>{chatbot_name.upper()}:</strong> {response}</div>', unsafe_allow_html=True)
-                
-                st.rerun()
+                # Show AI response
+                config = PERSONAS[persona]
+                message_class = f"ai-message-{config['chat_class']}"
+                st.markdown(f'<div class="ai-message {message_class}"><strong>{config["name"].upper()}:</strong> {response}</div>', unsafe_allow_html=True)
+        
+        st.rerun()
+
+# Handle manual triggers
+if hasattr(st.session_state, 'trigger_persona') and st.session_state.trigger_persona:
+    persona = st.session_state.trigger_persona
+    del st.session_state.trigger_persona
+    
+    if st.session_state.api_key and st.session_state.messages:
+        with st.spinner(f"{PERSONAS[persona]['name']} is thinking..."):
+            system_prompt = get_personality_prompt(persona, sliders, st.session_state.active_personas)
+            response = get_ai_response(st.session_state.messages, system_prompt, st.session_state.api_key)
+            
+            # Add AI response
+            st.session_state.messages.append({
+                "role": "assistant", 
+                "content": response,
+                "persona": persona
+            })
+            
+            # Show AI response
+            config = PERSONAS[persona]
+            message_class = f"ai-message-{config['chat_class']}"
+            st.markdown(f'<div class="ai-message {message_class}"><strong>{config["name"].upper()}:</strong> {response}</div>', unsafe_allow_html=True)
+        
+        st.rerun()
 
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
-st.markdown(f"**🔗 {chatbot_name} ChatBot** | Built with Streamlit & OpenAI GPT-4 | *Welcome to the Matrix...* 🕶️")
+st.markdown("**🎭 Multi-Personality Chat Arena** | Built with Streamlit & OpenAI GPT-4 | *Where AI personalities come alive!* ✨")
