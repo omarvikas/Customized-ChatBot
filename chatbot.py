@@ -20,6 +20,26 @@ if "character_set" not in st.session_state:
 if "custom_character" not in st.session_state:
     st.session_state.custom_character = ""
 
+# Preset personas (moved back in explicitly for reference)
+PERSONAS = {
+    "Custom": {
+        "description": "Create your own personality",
+        "system_prompt": "You are a helpful AI assistant.",
+        "defaults": {"sarcasm": 20, "formality": 50, "empathy": 70}
+    },
+    "Narendra Modi": {
+        "description": "Inspirational leader with metaphorical speech",
+        "system_prompt": "You are Narendra Modi...",
+        "defaults": {"sarcasm": 5, "formality": 85, "empathy": 75}
+    },
+    "James Bond": {
+        "description": "Sophisticated spy with wit and charm",
+        "system_prompt": "You are James Bond...",
+        "defaults": {"sarcasm": 70, "formality": 80, "empathy": 40}
+    }
+    # Add more personas as needed, trimmed to only keep required slider defaults
+}
+
 # Page config
 st.set_page_config(
     page_title="Matrix ChatBot",
@@ -37,7 +57,7 @@ st.markdown("""
 
 # Matrix rain effect without comment line
 st.markdown("""
-<div class="matrix-bg" id="matrix-container"></div>
+<div class=\"matrix-bg\" id=\"matrix-container\"></div>
 <script>
 function createMatrixRain() {
     const container = document.getElementById('matrix-container');
@@ -65,8 +85,6 @@ function createMatrixRain() {
 createMatrixRain();
 </script>
 """, unsafe_allow_html=True)
-
-# (PERSONAS and other functions unchanged - keep as in original code)
 
 # Sidebar for controls
 with st.sidebar:
