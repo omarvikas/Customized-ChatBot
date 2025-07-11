@@ -40,21 +40,6 @@ st.markdown("""
     100% { background-position: 0% 50%; }
 }
 
-/* Floating particles */
-.particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
-    50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
-}
-
 /* Main App Styling */
 .stApp {
     background: transparent;
@@ -73,22 +58,6 @@ st.markdown("""
     backdrop-filter: blur(15px);
     position: relative;
     overflow: hidden;
-}
-
-.chat-arena::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-    animation: shine 3s ease-in-out infinite;
-}
-
-@keyframes shine {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
 }
 
 .arena-header {
@@ -110,7 +79,7 @@ st.markdown("""
     50% { background-position: 100% 50%; }
 }
 
-/* Personality-themed chat styling */
+/* User message styling */
 .user-message {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -132,32 +101,32 @@ st.markdown("""
 }
 
 /* AI message styles for each persona */
-.ai-message-custom {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: 2px solid #667eea;
+.ai-message-elon {
+    background: linear-gradient(135deg, #ff4444 0%, #ff6b6b 50%, #000000 100%);
+    border: 2px solid #ff4444;
     color: #ffffff;
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 20px rgba(255, 68, 68, 0.4);
+}
+
+.ai-message-jesse {
+    background: linear-gradient(135deg, #32cd32 0%, #228b22 50%, #ffd700 100%);
+    border: 2px solid #32cd32;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(50, 205, 50, 0.4);
+}
+
+.ai-message-trump {
+    background: linear-gradient(135deg, #ff0000 0%, #ffffff 50%, #0000ff 100%);
+    border: 2px solid #ff0000;
+    color: #000000;
+    box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
 }
 
 .ai-message-modi {
-    background: linear-gradient(135deg, #ff9933 0%, #138808 50%, #0064ff 100%);
+    background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
     border: 2px solid #ff9933;
-    color: #ffffff;
+    color: #000000;
     box-shadow: 0 8px 20px rgba(255, 153, 51, 0.4);
-}
-
-.ai-message-bond {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #ecf0f1 100%);
-    border: 2px solid #ecf0f1;
-    color: #ffffff;
-    box-shadow: 0 8px 20px rgba(236, 240, 241, 0.3);
-}
-
-.ai-message-sheldon {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 50%, #ecf0f1 100%);
-    border: 2px solid #3498db;
-    color: #ffffff;
-    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
 }
 
 .ai-message-stark {
@@ -165,20 +134,6 @@ st.markdown("""
     border: 2px solid #e74c3c;
     color: #ffffff;
     box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
-}
-
-.ai-message-yoda {
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 50%, #16a085 100%);
-    border: 2px solid #27ae60;
-    color: #ffffff;
-    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
-}
-
-.ai-message-holmes {
-    background: linear-gradient(135deg, #8b4513 0%, #a0522d 50%, #d2691e 100%);
-    border: 2px solid #8b4513;
-    color: #ffffff;
-    box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
 }
 
 .ai-message {
@@ -212,45 +167,6 @@ st.markdown("""
     padding: 20px;
     margin: 10px 0;
     backdrop-filter: blur(10px);
-}
-
-.persona-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    padding: 10px;
-    margin: 5px 0;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.persona-card:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
-}
-
-.persona-card.selected {
-    background: linear-gradient(135deg, #4ecdc4, #44a08d);
-    border-color: #4ecdc4;
-    color: #ffffff;
-}
-
-.thinking-indicator {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-    color: white;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 12px;
-    animation: pulse 2s infinite;
-    display: inline-block;
-    margin: 5px 0;
-}
-
-@keyframes pulse {
-    0% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.05); }
-    100% { opacity: 1; transform: scale(1); }
 }
 
 /* Sidebar styling */
@@ -302,85 +218,100 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Add animated background
-st.markdown("""
-<div class="main-bg"></div>
-<script>
-// Create floating particles
-function createParticles() {
-    const particleCount = 50;
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 6 + 's';
-        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-        document.body.appendChild(particle);
-    }
-}
+st.markdown('<div class="main-bg"></div>', unsafe_allow_html=True)
 
-// Initialize particles
-createParticles();
-</script>
-""", unsafe_allow_html=True)
-
-# Enhanced personas with conversation abilities
+# Enhanced personas with detailed conversation abilities
 PERSONAS = {
-    "Custom": {
-        "name": "Matrix Assistant",
-        "description": "Helpful AI assistant",
-        "system_prompt": "You are a helpful AI assistant participating in a group chat. Add 2-3 relevant emojis to your responses. When other AI personalities speak, you can respond to them directly, ask questions, or build on their ideas. Be collaborative and engaging.",
-        "emojis": ["🤖", "💭", "✨", "🎯", "💡"],
-        "chat_class": "custom",
-        "defaults": {"sarcasm": 20, "confidence": 60, "creativity": 50}
+    "Elon Musk": {
+        "name": "Elon Musk",
+        "description": "CEO of Tesla, SpaceX - Visionary entrepreneur",
+        "system_prompt": """You are Elon Musk participating in a group chat. You are passionate about technology, space exploration, electric vehicles, and making humanity multiplanetary. You tend to be direct, sometimes controversial, and always thinking about the future. You make references to Mars, rockets, AI, and sustainable energy. You're known for your ambitious goals and disruptive thinking. 
+
+When responding:
+- Use your characteristic direct and sometimes edgy communication style
+- Reference your companies (Tesla, SpaceX, Neuralink, etc.)
+- Share your vision for the future
+- Sometimes make bold predictions or statements
+- Engage with others by asking about their thoughts on technology and the future
+- Be willing to debate and challenge ideas
+- Use emojis like 🚀, ⚡, 🤖, 🌌, 🔥
+
+Remember: You're in a conversation with other personalities. Listen to what they say and respond thoughtfully, building on their ideas or challenging them when appropriate.""",
+        "emojis": ["🚀", "⚡", "🤖", "🌌", "🔥", "💡"],
+        "chat_class": "elon"
+    },
+    "Jesse Pinkman": {
+        "name": "Jesse Pinkman",
+        "description": "From Breaking Bad - Street-smart with a good heart",
+        "system_prompt": """You are Jesse Pinkman from Breaking Bad participating in a group chat. You have a casual, street-smart way of speaking with a good heart underneath. You use slang, say "yo" frequently, and have strong opinions about loyalty and doing the right thing. You're street-smart but also surprisingly insightful about human nature.
+
+When responding:
+- Use casual, street language and slang
+- Say "yo" and similar expressions frequently
+- Show your loyalty to friends and strong moral compass
+- Reference your experiences and lessons learned
+- Be authentic and emotional when topics matter to you
+- Ask direct questions and challenge people when needed
+- Use emojis like 💯, 🔥, 😤, 💪, 🎯, ✊
+
+Remember: You're in a conversation with other personalities. React to what they say, call them out if needed, and support them when they're right. Be real and authentic.""",
+        "emojis": ["💯", "🔥", "😤", "💪", "🎯", "✊"],
+        "chat_class": "jesse"
+    },
+    "Donald Trump": {
+        "name": "Donald Trump",
+        "description": "45th President of the United States",
+        "system_prompt": """You are Donald Trump participating in a group chat. You communicate with confidence, often using superlatives like "tremendous," "incredible," "the best," etc. You frequently reference your accomplishments and experiences. You have strong opinions and aren't afraid to express them. You often relate topics back to business, deals, and winning.
+
+When responding:
+- Use your characteristic confident and bold communication style
+- Employ superlatives and strong adjectives
+- Reference your business and political experience
+- Express strong opinions with conviction
+- Sometimes be competitive with others in the chat
+- Use phrases like "believe me," "tremendous," "incredible"
+- Use emojis like 🇺🇸, 💪, 🏆, 🔥, 👑, 💯
+
+Remember: You're in a conversation with other personalities. Engage with their ideas, sometimes agree, sometimes challenge, but always stay true to your confident style.""",
+        "emojis": ["🇺🇸", "💪", "🏆", "🔥", "👑", "💯"],
+        "chat_class": "trump"
     },
     "Narendra Modi": {
         "name": "Narendra Modi",
         "description": "Prime Minister of India - Inspirational leader",
-        "system_prompt": "You are Narendra Modi participating in a group chat. Use inspirational language, metaphors, and references to Indian culture. Add 2-3 relevant emojis including 🇮🇳, 🪷, 🚀. When other personalities speak, you can respond with your perspective, share wisdom, or ask thoughtful questions. Use phrases like 'My friends' when addressing the group.",
-        "emojis": ["🇮🇳", "🪷", "🚀", "💪", "🌟", "🙏"],
-        "chat_class": "modi",
-        "defaults": {"sarcasm": 5, "confidence": 95, "creativity": 85}
-    },
-    "James Bond": {
-        "name": "James Bond",
-        "description": "British Secret Agent - Sophisticated spy",
-        "system_prompt": "You are James Bond participating in a group chat. Be sophisticated, witty, and charming. Add 2-3 relevant emojis including 🍸, 🎯, 💼. When other personalities speak, you can respond with wit, make sophisticated observations, or share spy-like insights. Use British expressions and maintain your cool demeanor.",
-        "emojis": ["🍸", "🎯", "💼", "🚗", "⌚", "🇬🇧"],
-        "chat_class": "bond",
-        "defaults": {"sarcasm": 70, "confidence": 95, "creativity": 60}
-    },
-    "Sheldon Cooper": {
-        "name": "Sheldon Cooper",
-        "description": "Theoretical Physicist - Genius but pedantic",
-        "system_prompt": "You are Sheldon Cooper participating in a group chat. Be analytical, pedantic, and scientifically precise. Add 2-3 relevant emojis including 🧬, 🔬, 🧪. When other personalities speak, you can correct them, provide scientific explanations, or make condescending but well-meaning comments. Use 'Bazinga!' occasionally and reference scientific concepts.",
-        "emojis": ["🧬", "🔬", "🧪", "📐", "🤓", "💡"],
-        "chat_class": "sheldon",
-        "defaults": {"sarcasm": 85, "confidence": 100, "creativity": 30}
+        "system_prompt": """You are Narendra Modi participating in a group chat. You speak with inspiration and vision, often using metaphors and references to Indian culture and values. You emphasize unity, progress, and the power of collective action. You address others respectfully and seek to inspire them toward positive goals.
+
+When responding:
+- Use inspirational and uplifting language
+- Reference Indian culture, values, and philosophy
+- Emphasize unity, progress, and collective strength
+- Use metaphors and storytelling in your communication
+- Address others respectfully (like "my friends")
+- Share wisdom about leadership and governance
+- Use emojis like 🇮🇳, 🙏, 🌟, 💪, 🚀, 🪷
+
+Remember: You're in a conversation with other personalities. Listen to their concerns, offer wisdom and encouragement, and try to find common ground that brings people together.""",
+        "emojis": ["🇮🇳", "🙏", "🌟", "💪", "🚀", "🪷"],
+        "chat_class": "modi"
     },
     "Tony Stark": {
         "name": "Tony Stark",
         "description": "Iron Man - Genius billionaire inventor",
-        "system_prompt": "You are Tony Stark participating in a group chat. Be witty, sarcastic, and incredibly confident. Add 2-3 relevant emojis including 🤖, 💰, 🔧. When other personalities speak, you can make witty comebacks, show off your intellect, or reference technology. Use phrases like 'Obviously' and make pop culture references.",
-        "emojis": ["🤖", "💰", "🔧", "⚡", "🎯", "🚀"],
-        "chat_class": "stark",
-        "defaults": {"sarcasm": 90, "confidence": 100, "creativity": 95}
-    },
-    "Yoda": {
-        "name": "Yoda",
-        "description": "Jedi Master - Wise and mystical",
-        "system_prompt": "You are Yoda participating in a group chat. Speak with inverted sentence structure and provide wisdom. Add 2-3 relevant emojis including 🌟, ⚔️, 🧙. When other personalities speak, you can offer wisdom, make cryptic but meaningful comments, or provide guidance. Use phrases like 'Hmm' and reference the Force.",
-        "emojis": ["🌟", "⚔️", "🧙", "🌌", "🔮", "☯️"],
-        "chat_class": "yoda",
-        "defaults": {"sarcasm": 10, "confidence": 90, "creativity": 90}
-    },
-    "Sherlock Holmes": {
-        "name": "Sherlock Holmes",
-        "description": "Consulting Detective - Master of deduction",
-        "system_prompt": "You are Sherlock Holmes participating in a group chat. Use deductive reasoning and pay attention to details. Add 2-3 relevant emojis including 🔍, 🕵️, 🧠. When other personalities speak, you can analyze their statements, make deductions, or point out logical inconsistencies. Use phrases like 'Elementary' and 'I observe that...'",
-        "emojis": ["🔍", "🕵️", "🧠", "📚", "🔎", "⚖️"],
-        "chat_class": "holmes",
-        "defaults": {"sarcasm": 60, "confidence": 100, "creativity": 85}
+        "system_prompt": """You are Tony Stark (Iron Man) participating in a group chat. You are incredibly intelligent, witty, and sarcastic. You're a genius inventor and billionaire who loves showing off your intellect and technology. You make pop culture references, use cutting wit, and aren't afraid to be arrogant about your abilities.
+
+When responding:
+- Display your genius-level intellect and wit
+- Be sarcastic and use cutting humor
+- Reference your technology and inventions
+- Make pop culture references
+- Be confident to the point of arrogance
+- Challenge others intellectually
+- Use phrases like "Obviously," "Please," "Genius at work"
+- Use emojis like 🤖, 💰, 🔧, ⚡, 🎯, 🧠
+
+Remember: You're in a conversation with other personalities. Engage with their ideas, sometimes show off your superior knowledge, but also recognize when others make good points. Your wit should be sharp but not mean-spirited.""",
+        "emojis": ["🤖", "💰", "🔧", "⚡", "🎯", "🧠"],
+        "chat_class": "stark"
     }
 }
 
@@ -392,93 +323,137 @@ if "api_key" not in st.session_state:
     st.session_state.api_key = ""
 
 if "active_personas" not in st.session_state:
-    st.session_state.active_personas = ["Custom"]
+    st.session_state.active_personas = ["Elon Musk"]
 
 if "conversation_mode" not in st.session_state:
-    st.session_state.conversation_mode = "User Only"
+    st.session_state.conversation_mode = "Auto-Respond"
 
-if "auto_respond" not in st.session_state:
-    st.session_state.auto_respond = False
+if "last_speaker" not in st.session_state:
+    st.session_state.last_speaker = None
 
-def get_personality_prompt(persona: str, sliders: Dict[str, int], all_active_personas: List[str]) -> str:
-    """Generate personality-based system prompt for group chat"""
+if "conversation_context" not in st.session_state:
+    st.session_state.conversation_context = {}
+
+def get_conversation_context(messages: List[Dict]) -> str:
+    """Build context about the recent conversation"""
+    if not messages:
+        return ""
+    
+    # Get last 5 messages for context
+    recent_messages = messages[-5:]
+    context_parts = []
+    
+    for msg in recent_messages:
+        if msg["role"] == "user":
+            context_parts.append(f"User said: {msg['content']}")
+        else:
+            persona = msg.get("persona", "Unknown")
+            context_parts.append(f"{persona} said: {msg['content']}")
+    
+    return "\n".join(context_parts)
+
+def get_personality_prompt(persona: str, all_active_personas: List[str], conversation_context: str) -> str:
+    """Generate enhanced personality-based system prompt"""
     base_prompt = PERSONAS[persona]["system_prompt"]
     
     # Add context about other active personas
     if len(all_active_personas) > 1:
         other_personas = [p for p in all_active_personas if p != persona]
-        base_prompt += f"\n\nOther AI personalities in this conversation: {', '.join(other_personas)}. You can interact with them, respond to their messages, ask them questions, or build on their ideas."
+        base_prompt += f"\n\nOther personalities currently active in this chat: {', '.join(other_personas)}."
     
-    # Add personality modifiers
-    modifiers = []
+    # Add conversation context
+    if conversation_context:
+        base_prompt += f"\n\nRecent conversation context:\n{conversation_context}"
+        base_prompt += f"\n\nBased on this context, respond as {persona} would. Reference what others have said, ask follow-up questions, agree/disagree, or build on the conversation naturally."
     
-    if sliders["sarcasm"] > 70:
-        modifiers.append("Be quite sarcastic and witty in your responses.")
-    elif sliders["sarcasm"] < 30:
-        modifiers.append("Be sincere and avoid sarcasm.")
-    
-    if sliders["confidence"] > 80:
-        modifiers.append("Express yourself with absolute certainty and authority.")
-    elif sliders["confidence"] < 40:
-        modifiers.append("Express some uncertainty and use qualifying phrases.")
-    
-    if sliders["creativity"] > 70:
-        modifiers.append("Be creative and imaginative in your responses with unique perspectives.")
-    elif sliders["creativity"] < 30:
-        modifiers.append("Stick to factual, straightforward information.")
-    
-    # Combine all elements
-    if modifiers:
-        base_prompt += "\n\nPersonality modifiers:\n" + "\n".join(f"- {mod}" for mod in modifiers)
+    # Add engagement instructions
+    base_prompt += f"\n\nIMPORTANT: You are {persona}. Stay in character and engage naturally with the conversation. Your response should be 1-3 sentences unless the topic requires more detail."
     
     return base_prompt
 
 def get_ai_response(messages: List[Dict], system_prompt: str, api_key: str) -> str:
-    """Get response from OpenAI API"""
+    """Get response from OpenAI API with better error handling"""
     try:
         openai.api_key = api_key
         
+        # Convert messages to proper format for API
+        formatted_messages = []
+        for msg in messages:
+            if msg["role"] == "user":
+                formatted_messages.append({"role": "user", "content": msg["content"]})
+            else:
+                # Include persona info in assistant messages
+                persona = msg.get("persona", "Assistant")
+                content = f"[{persona}]: {msg['content']}"
+                formatted_messages.append({"role": "assistant", "content": content})
+        
         response = openai.chat.completions.create(
             model="gpt-4",
-            messages=[{"role": "system", "content": system_prompt}] + messages,
-            temperature=0.7,
-            max_tokens=1000
+            messages=[{"role": "system", "content": system_prompt}] + formatted_messages,
+            temperature=0.8,
+            max_tokens=800,
+            presence_penalty=0.1,
+            frequency_penalty=0.1
         )
         
-        return response.choices[0].message.content
+        return response.choices[0].message.content.strip()
         
     except Exception as e:
         return f"Error: {str(e)}"
 
-def should_persona_respond(persona: str, last_message: str, messages: List[Dict]) -> bool:
-    """Determine if a persona should respond based on context"""
+def should_persona_respond(persona: str, last_message: str, messages: List[Dict], last_speaker: str) -> bool:
+    """Improved logic for determining if a persona should respond"""
     if not messages:
+        return False
+    
+    # Don't respond to yourself
+    if last_speaker == persona:
         return False
     
     # Always respond if directly mentioned
     if persona.lower() in last_message.lower():
         return True
     
-    # Random chance to join conversation (30% for active engagement)
-    if random.random() < 0.3:
-        return True
-    
-    # Respond if the topic relates to their expertise
-    persona_triggers = {
-        "Modi": ["india", "leadership", "development", "progress", "nation"],
-        "Bond": ["mission", "spy", "elegant", "sophisticated", "danger"],
-        "Sheldon": ["science", "physics", "theory", "logic", "research"],
-        "Stark": ["technology", "innovation", "engineering", "genius", "money"],
-        "Yoda": ["wisdom", "force", "patience", "learning", "balance"],
-        "Holmes": ["mystery", "deduction", "evidence", "logic", "crime"]
+    # Check if the topic is relevant to their expertise/interests
+    persona_keywords = {
+        "Elon Musk": ["space", "tesla", "electric", "mars", "rocket", "ai", "technology", "future", "innovation", "spacex"],
+        "Jesse Pinkman": ["loyalty", "right", "wrong", "street", "real", "truth", "friend", "respect", "honest"],
+        "Donald Trump": ["deal", "business", "win", "great", "america", "success", "money", "negotiate", "best"],
+        "Narendra Modi": ["india", "progress", "unity", "development", "growth", "vision", "future", "together", "nation"],
+        "Tony Stark": ["technology", "genius", "smart", "invention", "engineering", "science", "innovation", "solution"]
     }
     
-    if persona in persona_triggers:
-        for trigger in persona_triggers[persona]:
-            if trigger in last_message.lower():
-                return True
+    # Higher chance to respond if topic is relevant
+    if persona in persona_keywords:
+        for keyword in persona_keywords[persona]:
+            if keyword in last_message.lower():
+                return random.random() < 0.8  # 80% chance for relevant topics
     
-    return False
+    # Random chance for general engagement (40% chance)
+    return random.random() < 0.4
+
+def select_responding_personas(active_personas: List[str], user_message: str, messages: List[Dict], last_speaker: str) -> List[str]:
+    """Select which personas should respond, ensuring good conversation flow"""
+    responders = []
+    
+    # Always have at least one responder
+    for persona in active_personas:
+        if should_persona_respond(persona, user_message, messages, last_speaker):
+            responders.append(persona)
+    
+    # If no one wants to respond, pick a random one
+    if not responders and active_personas:
+        available_personas = [p for p in active_personas if p != last_speaker]
+        if available_personas:
+            responders = [random.choice(available_personas)]
+        else:
+            responders = [random.choice(active_personas)]
+    
+    # Limit to maximum 3 responders to avoid chaos
+    if len(responders) > 3:
+        responders = random.sample(responders, 3)
+    
+    return responders
 
 # Sidebar for controls
 with st.sidebar:
@@ -490,17 +465,17 @@ with st.sidebar:
     try:
         api_key = st.secrets["OPENAI_API_KEY"]
         st.session_state.api_key = api_key
-        st.success("✅ API Key loaded")
+        st.success("✅ API Key loaded from secrets")
     except:
         api_key = st.text_input("Enter your OpenAI API key", type="password", value=st.session_state.api_key)
         if api_key:
             st.session_state.api_key = api_key
+            st.success("✅ API Key entered")
     
     st.markdown("---")
     
     # Persona Selection
     st.markdown("**🎭 Select Active Personalities:**")
-    st.markdown("*Choose which AI personalities can participate in the chat*")
     
     selected_personas = []
     for persona, config in PERSONAS.items():
@@ -514,6 +489,7 @@ with st.sidebar:
     
     if selected_personas != st.session_state.active_personas:
         st.session_state.active_personas = selected_personas
+        st.rerun()
     
     st.markdown("---")
     
@@ -521,37 +497,27 @@ with st.sidebar:
     st.markdown("**💬 Conversation Mode:**")
     conversation_mode = st.selectbox(
         "How should AIs respond?",
-        ["User Only", "Auto-Respond", "Manual Trigger"],
-        help="User Only: Only respond to user messages\nAuto-Respond: AIs can respond to each other automatically\nManual Trigger: Click button to make AIs respond"
+        ["Auto-Respond", "Manual Trigger", "One-at-a-Time"],
+        help="Auto-Respond: AIs respond naturally to conversation\nManual Trigger: Click to make specific AI respond\nOne-at-a-Time: Only one AI responds per message"
     )
     st.session_state.conversation_mode = conversation_mode
-    
-    # Auto-respond settings
-    if conversation_mode == "Auto-Respond":
-        st.session_state.auto_respond = st.checkbox("Enable AI-to-AI conversations", value=True)
-    
-    st.markdown("---")
-    
-    # Personality controls (simplified)
-    st.markdown("**🎚️ Global Personality Settings:**")
-    sliders = {
-        "sarcasm": st.slider("🗣️ Sarcasm Level", 0, 100, 50),
-        "confidence": st.slider("💪 Confidence", 0, 100, 70),
-        "creativity": st.slider("🎨 Creativity", 0, 100, 60)
-    }
     
     st.markdown("---")
     
     # Control buttons
     if st.button("🔄 Reset Chat"):
         st.session_state.messages = []
+        st.session_state.last_speaker = None
+        st.session_state.conversation_context = {}
         st.rerun()
     
     if st.button("🎲 Random Response") and st.session_state.active_personas:
         if st.session_state.api_key and st.session_state.messages:
-            random_persona = random.choice(st.session_state.active_personas)
-            st.session_state.trigger_persona = random_persona
-            st.rerun()
+            available_personas = [p for p in st.session_state.active_personas if p != st.session_state.last_speaker]
+            if available_personas:
+                random_persona = random.choice(available_personas)
+                st.session_state.trigger_persona = random_persona
+                st.rerun()
     
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -567,6 +533,8 @@ if st.session_state.active_personas:
         config = PERSONAS[persona]
         persona_badges.append(f"{config['emojis'][0]} {config['name']}")
     st.markdown(" • ".join(persona_badges))
+    
+    st.markdown(f"**🎯 Mode:** {st.session_state.conversation_mode}")
 else:
     st.warning("⚠️ Please select at least one personality to start chatting!")
 
@@ -579,7 +547,7 @@ with chat_container:
         if message["role"] == "user":
             st.markdown(f'<div class="user-message"><strong>YOU:</strong> {message["content"]}</div>', unsafe_allow_html=True)
         else:
-            persona = message.get("persona", "Custom")
+            persona = message.get("persona", "Unknown")
             if persona in PERSONAS:
                 config = PERSONAS[persona]
                 message_class = f"ai-message-{config['chat_class']}"
@@ -604,39 +572,49 @@ if prompt := st.chat_input("Enter your message to the arena..."):
     else:
         # Add user message
         st.session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state.last_speaker = "user"
         
-        # Show user message
+        # Show user message immediately
         st.markdown(f'<div class="user-message"><strong>YOU:</strong> {prompt}</div>', unsafe_allow_html=True)
         
-        # Get responses from active personas
-        responses_to_generate = []
+        # Determine which personas should respond
+        responders = []
         
-        if st.session_state.conversation_mode == "User Only":
-            # Only one random persona responds to user
-            responses_to_generate = [random.choice(st.session_state.active_personas)]
-        elif st.session_state.conversation_mode == "Auto-Respond":
-            # Multiple personas might respond
-            for persona in st.session_state.active_personas:
-                if should_persona_respond(persona, prompt, st.session_state.messages):
-                    responses_to_generate.append(persona)
+        if st.session_state.conversation_mode == "Auto-Respond":
+            responders = select_responding_personas(st.session_state.active_personas, prompt, st.session_state.messages, st.session_state.last_speaker)
+        elif st.session_state.conversation_mode == "One-at-a-Time":
+            available_personas = [p for p in st.session_state.active_personas if p != st.session_state.last_speaker]
+            if available_personas:
+                responders = [random.choice(available_personas)]
+            else:
+                responders = [random.choice(st.session_state.active_personas)]
         
         # Generate responses
-        for persona in responses_to_generate:
-            with st.spinner(f"{PERSONAS[persona]['name']} is thinking..."):
-                system_prompt = get_personality_prompt(persona, sliders, st.session_state.active_personas)
+        conversation_context = get_conversation_context(st.session_state.messages)
+        
+        for persona in responders:
+            with st.spinner(f"🤔 {PERSONAS[persona]['name']} is thinking..."):
+                time.sleep(0.5)  # Small delay for realism
+                system_prompt = get_personality_prompt(persona, st.session_state.active_personas, conversation_context)
                 response = get_ai_response(st.session_state.messages, system_prompt, st.session_state.api_key)
                 
-                # Add AI response
-                st.session_state.messages.append({
-                    "role": "assistant", 
-                    "content": response,
-                    "persona": persona
-                })
-                
-                # Show AI response
-                config = PERSONAS[persona]
-                message_class = f"ai-message-{config['chat_class']}"
-                st.markdown(f'<div class="ai-message {message_class}"><strong>{config["name"].upper()}:</strong> {response}</div>', unsafe_allow_html=True)
+                if not response.startswith("Error:"):
+                    # Add AI response with correct persona
+                    st.session_state.messages.append({
+                        "role": "assistant", 
+                        "content": response,
+                        "persona": persona
+                    })
+                    
+                    # Update last speaker
+                    st.session_state.last_speaker = persona
+                    
+                    # Show AI response immediately
+                    config = PERSONAS[persona]
+                    message_class = f"ai-message-{config['chat_class']}"
+                    st.markdown(f'<div class="ai-message {message_class}"><strong>{config["name"].upper()}:</strong> {response}</div>', unsafe_allow_html=True)
+                else:
+                    st.error(f"Error getting response from {persona}: {response}")
         
         st.rerun()
 
@@ -646,21 +624,28 @@ if hasattr(st.session_state, 'trigger_persona') and st.session_state.trigger_per
     del st.session_state.trigger_persona
     
     if st.session_state.api_key and st.session_state.messages:
-        with st.spinner(f"{PERSONAS[persona]['name']} is thinking..."):
-            system_prompt = get_personality_prompt(persona, sliders, st.session_state.active_personas)
+        with st.spinner(f"🤔 {PERSONAS[persona]['name']} is thinking..."):
+            conversation_context = get_conversation_context(st.session_state.messages)
+            system_prompt = get_personality_prompt(persona, st.session_state.active_personas, conversation_context)
             response = get_ai_response(st.session_state.messages, system_prompt, st.session_state.api_key)
             
-            # Add AI response
-            st.session_state.messages.append({
-                "role": "assistant", 
-                "content": response,
-                "persona": persona
-            })
-            
-            # Show AI response
-            config = PERSONAS[persona]
-            message_class = f"ai-message-{config['chat_class']}"
-            st.markdown(f'<div class="ai-message {message_class}"><strong>{config["name"].upper()}:</strong> {response}</div>', unsafe_allow_html=True)
+            if not response.startswith("Error:"):
+                # Add AI response with correct persona
+                st.session_state.messages.append({
+                    "role": "assistant", 
+                    "content": response,
+                    "persona": persona
+                })
+                
+                # Update last speaker
+                st.session_state.last_speaker = persona
+                
+                # Show AI response
+                config = PERSONAS[persona]
+                message_class = f"ai-message-{config['chat_class']}"
+                st.markdown(f'<div class="ai-message {message_class}"><strong>{config["name"].upper()}:</strong> {response}</div>', unsafe_allow_html=True)
+            else:
+                st.error(f"Error getting response from {persona}: {response}")
         
         st.rerun()
 
